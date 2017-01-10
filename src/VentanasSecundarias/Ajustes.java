@@ -6,7 +6,7 @@
 package VentanasSecundarias;
 
 import BaseDatos.ArchivoPropiedades;
-import Clases.CrashReporter;
+import GestionErrores.CrashReporterImpl;
 import Clases.Rutas;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -14,9 +14,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.ConfigurationException;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -31,20 +28,13 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 public final class Ajustes extends JFrame implements ActionListener {
 
-    static String claseActual = "VentanasSecundarias.Ajustes";
+    static String CLASEACTUAL = "VentanasSecundarias.Ajustes";
 
-    static final Logger ARCHIVOLOG = Logger.getLogger(claseActual);
-
-    JPanel panelPrincipal, panelTodo, panelAbajo;
+    JPanel panelPrincipal, panelTodo;
 
     JComboBox<String> tamanoTitulo, fuenteTitulo, tamanoCuerpo, fuenteCuerpo;
 
-    JButton botonAplicar;
-
-    UIManager.LookAndFeelInfo[] arrayTemas;
-
     JComboBox<String> temas;
-    JLabel labelTemas;
 
     public Ajustes() {
 
@@ -54,7 +44,6 @@ public final class Ajustes extends JFrame implements ActionListener {
 
         definirPanelAbajo();
         definirVentana();
-//        cargarProperties();
 
         this.add(panelTodo);
         this.pack();
@@ -63,7 +52,6 @@ public final class Ajustes extends JFrame implements ActionListener {
 
     public void definirVentana() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setTitle("Configuración");
     }
 
@@ -76,6 +64,9 @@ public final class Ajustes extends JFrame implements ActionListener {
     }
 
     public void definirPanelTemas() {
+        JLabel labelTemas;
+
+        UIManager.LookAndFeelInfo[] arrayTemas;
 
         JPanel panelTemas = new JPanel();
 
@@ -159,6 +150,9 @@ public final class Ajustes extends JFrame implements ActionListener {
 
     public void definirPanelAbajo() {
 
+        JPanel panelAbajo;
+        JButton botonAplicar;
+        
         panelAbajo = new JPanel();
 
         botonAplicar = new JButton("Aplicar");
@@ -189,8 +183,8 @@ public final class Ajustes extends JFrame implements ActionListener {
                             | InstantiationException
                             | IllegalAccessException
                             | UnsupportedLookAndFeelException ex) {
-                        
-                        CrashReporter.meterCadena(CrashReporter.fechaActual().concat(" Error al definir el tema "+ex.getMessage()), claseActual);
+
+                        CrashReporterImpl.meterCadena(CrashReporterImpl.fechaActual().concat(" Error al definir el tema " + ex.getMessage()), CLASEACTUAL);
                         errorDefTema = true;
                     }
                 } while (errorDefTema == true);
@@ -218,8 +212,8 @@ public final class Ajustes extends JFrame implements ActionListener {
         try {
             config = new PropertiesConfiguration(Rutas.rutaInstalacion + "/InfoLol/ArchivosPropiedades/conf.properties");
         } catch (org.apache.commons.configuration.ConfigurationException ex) {
-            ARCHIVOLOG.severe(CrashReporter.fechaActual().concat(" Error al leer properties" + ex.getMessage()));
-            CrashReporter cr = new CrashReporter(claseActual);
+            CrashReporterImpl.meterCadena(CrashReporterImpl.fechaActual().concat("Error al leer el archivo properties" + ex.getMessage()), CLASEACTUAL);
+            CrashReporterImpl cr = new CrashReporterImpl(CLASEACTUAL);
         }
 
         String temaElegido = temas.getSelectedItem().toString();
@@ -235,8 +229,8 @@ public final class Ajustes extends JFrame implements ActionListener {
         try {
             config.save();
         } catch (org.apache.commons.configuration.ConfigurationException ex) {
-            ARCHIVOLOG.severe(CrashReporter.fechaActual().concat(" Error al guardar properties" + ex.getMessage()));
-            CrashReporter cr = new CrashReporter(claseActual);
+            CrashReporterImpl.meterCadena(CrashReporterImpl.fechaActual().concat("Error al guardar el archivo properties" + ex.getMessage()), CLASEACTUAL);
+            CrashReporterImpl cr = new CrashReporterImpl(CLASEACTUAL);
         }
 
     }

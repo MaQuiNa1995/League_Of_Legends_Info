@@ -5,8 +5,7 @@
  */
 package VentanasSecundarias;
 
-import BaseDatos.ArchivoPropiedades;
-import BaseDatos.Conector;
+import BaseDatos.ConectorImpl;
 import Clases.Rutas;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -14,7 +13,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Properties;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -24,41 +22,23 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.plaf.FontUIResource;
 
-/**
- *
- * @author MaQui
- */
-@SuppressWarnings("serial")
 public final class HistoriasCampeones extends JFrame implements ActionListener {
 
     JPanel panelTodo, panelArriba, buscarCampeonPanel, panelImagen,
             panelAbajo, infoPanel, panelIzquierda;
 
-    JLabel imagen, nombre;
-
-    Conector con = new Conector();
-
-    Properties propiedades = new ArchivoPropiedades().getProperties();
-
-    boolean error;
-
-    String campeonABuscar, inicial, despues;
-
-    JTextField buscarCampeon;
-
+    JLabel imagen,nombre;
     JTextArea mostrarCampeones;
-
     JComboBox<String> nombreCampeonCombo;
-
-    ArrayList<String> arrayCampeones;
-
-    JButton botonBuscar;
-
+    
+    ConectorImpl con;
+    
     public HistoriasCampeones() {
+        con = new ConectorImpl();
+        
         definirVentana();
         definirPanelTodo();
         definirPanelArriba();
@@ -81,6 +61,10 @@ public final class HistoriasCampeones extends JFrame implements ActionListener {
     }
 
     void definirPanelArriba() {
+        
+        JButton botonBuscar;
+        ArrayList<String> arrayCampeones;
+        
         panelArriba = new JPanel();
         panelArriba.setLayout(new BoxLayout(panelArriba, BoxLayout.PAGE_AXIS));
 
@@ -92,9 +76,9 @@ public final class HistoriasCampeones extends JFrame implements ActionListener {
         arrayCampeones = new ArrayList<>();
         arrayCampeones = con.nombresCampeones();
 
-        for (String objetoSacado : arrayCampeones) {
+        arrayCampeones.forEach((objetoSacado) -> {
             nombreCampeonCombo.addItem(objetoSacado);
-        }
+        });
 
         botonBuscar = new JButton("Buscar");
         botonBuscar.addActionListener(this);
@@ -166,7 +150,8 @@ public final class HistoriasCampeones extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
 
-        String directorioRecursos,
+        String campeonABuscar,
+                directorioRecursos,
                 rutaCampeones;
 
         directorioRecursos = Rutas.rutaInstalacion;

@@ -1,7 +1,7 @@
 package VentanasSecundarias;
 
 import BaseDatos.ArchivoPropiedades;
-import BaseDatos.Conector;
+import BaseDatos.ConectorImpl;
 import Clases.Habilidad;
 import Clases.Rutas;
 import Clases.Pasiva;
@@ -35,19 +35,16 @@ import javax.swing.plaf.FontUIResource;
 
 public final class InfoCampeones extends JFrame implements MouseListener, ActionListener {
 
-    Conector con = new Conector();
-
-    Font algerian = new FontUIResource("Arial", Font.BOLD, 15);
-    Font algerian2 = new FontUIResource("Arial", Font.BOLD, 24);
+    ConectorImpl con;
+    
+    private final Font arial = new FontUIResource("Arial", Font.BOLD, 24);
 
     Font cuerpo;
     Font titulo;
-
-    Border border = LineBorder.createGrayLineBorder();
-
-    List<Habilidad> arrayListHabilidades = new ArrayList<>();
-    List<Pasiva> arrayListPasivas = new ArrayList<>();
-    List<String> arrayListNombres;
+    
+    List<Habilidad> arrayListHabilidades;
+    List<Pasiva> arrayListPasivas;
+    
 
     JPanel panelTodo, panelTitulo, panelImagenes, panelImagenes2, panelStats, panelHabilidades, panelPasivas;
 
@@ -117,6 +114,8 @@ public final class InfoCampeones extends JFrame implements MouseListener, Action
 
     // --- Panel ---
     public InfoCampeones() {
+        con = new ConectorImpl();
+        
         inicializarFuentes();
         definirVentana();
         definirPanelTodo();
@@ -143,12 +142,13 @@ public final class InfoCampeones extends JFrame implements MouseListener, Action
     }
 
     public void definirPanelTitulo() {
+        List<String> arrayListNombres;
+        
         panelTitulo = new JPanel(new FlowLayout());
         nombreCampeonLabel = new JLabel("Nombre Campeón:");
-        nombreCampeonLabel.setFont(algerian2);
+        nombreCampeonLabel.setFont(arial);
         nombreCampeonCombo = new JComboBox<>();
-
-        arrayListNombres = new ArrayList<>();
+        
         arrayListNombres = con.nombresCampeones();
 
         arrayListNombres.stream().forEach((objetoSacado) -> {
@@ -159,7 +159,7 @@ public final class InfoCampeones extends JFrame implements MouseListener, Action
         buscar.addActionListener(this);
 
         moteCampeon = new JLabel();
-        moteCampeon.setFont(algerian2);
+        moteCampeon.setFont(arial);
 
         panelTitulo.add(nombreCampeonLabel);
         panelTitulo.add(nombreCampeonCombo);
@@ -231,7 +231,7 @@ public final class InfoCampeones extends JFrame implements MouseListener, Action
         imagenCampeon = new JLabel();
 
         costeIPCampeon = new JLabel();
-        costeIPCampeon.setFont(algerian2);
+        costeIPCampeon.setFont(arial);
 
         rolCampeon = new JLabel();
         rolCampeon.setFont(titulo);
@@ -343,6 +343,8 @@ public final class InfoCampeones extends JFrame implements MouseListener, Action
     }
 
     public void definirPanelHabilidades() {
+        
+        Border border = LineBorder.createGrayLineBorder();
 
         panelHabilidades = new JPanel();
         panelHabilidades.setLayout(new BoxLayout(panelHabilidades, BoxLayout.Y_AXIS));
@@ -430,6 +432,7 @@ public final class InfoCampeones extends JFrame implements MouseListener, Action
         coste2.setVisible(false);
 
         // Poner Bordes
+        
         nombreHabilidad2.setBorder(border);
         descripCorta2.setBorder(border);
         descripLarga2.setBorder(border);
@@ -463,6 +466,8 @@ public final class InfoCampeones extends JFrame implements MouseListener, Action
 
     @Override
     public void mouseEntered(MouseEvent me) {
+        
+        
 
         fotoP.setBorder(null);
         fotoQ.setBorder(null);
@@ -585,6 +590,8 @@ public final class InfoCampeones extends JFrame implements MouseListener, Action
     @Override
     public void actionPerformed(ActionEvent ae) {
         String campeonBuscar = nombreCampeonCombo.getSelectedItem().toString();
+        arrayListHabilidades = new ArrayList<>();
+        arrayListPasivas = new ArrayList<>();
         switch (ae.getActionCommand()) {
             case "Buscar":
                 panelStats.setVisible(true);

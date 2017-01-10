@@ -5,7 +5,7 @@
  */
 package VentanasSecundarias;
 
-import BaseDatos.Conector;
+import BaseDatos.ConectorImpl;
 import Clases.Rutas;
 import Clases.Skin;
 import java.awt.BorderLayout;
@@ -23,40 +23,34 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.plaf.FontUIResource;
 
 public final class SkinsCampeones extends JFrame implements ActionListener, ItemListener {
 
-    Font algerian2 = new FontUIResource("Algerian", Font.BOLD, 15);
+    private final Font arial = new FontUIResource("Arial", Font.BOLD, 15);
 
-    Conector con = new Conector();
+    ConectorImpl con;
 
     String rutaSplashArt = Rutas.rutaInstalacion+"/InfoLol/Imagenes/Skins/",
             nombreBuscar;
 
-    JPanel panelTodo, panelArriba, panelNombre, panelSkin, panelImagen, panelCoste;
+    JPanel panelTodo;
 
-    JLabel nombreLabel, skinLabel, imagenLabel, costeLabel, costeLabel2;
-
-    JButton buscar;
-
-    JTextField nombreText;
-
+    JLabel skinLabel, imagenLabel, costeLabel, costeLabel2;
     JComboBox<String> skinSelector;
     JComboBox<String> nombreCampeonCombo;
-    ArrayList<Skin> arrayListSkins ;
-    
     ArrayList<String> arrayCampeones;
+    ArrayList<Skin> arrayListSkins;
 
     // --- Panel ---
     public SkinsCampeones() {
+        con = new ConectorImpl();
+        
         definirVentana();
         definirPanelTodo();
         definirPanelArriba();
         definirPanelImagen();
-//        definirPanelDerecha();
 
         this.add(panelTodo);
         this.setVisible(true);
@@ -75,12 +69,16 @@ public final class SkinsCampeones extends JFrame implements ActionListener, Item
     
     void definirPanelArriba() {
 
-        panelArriba = new JPanel();
+        JLabel nombreLabel;
+        JButton buscar;
+        
+        JPanel panelArriba = new JPanel(), panelNombre, panelSkin,panelCoste;
+        
         panelArriba.setLayout(new BoxLayout(panelArriba, BoxLayout.Y_AXIS));
 
         panelNombre = new JPanel(new FlowLayout());
         nombreLabel = new JLabel("Nombre Campeón:");
-        nombreLabel.setFont(algerian2);
+        nombreLabel.setFont(arial);
         nombreCampeonCombo = new JComboBox<>();
 
         arrayCampeones = new ArrayList<>();
@@ -99,7 +97,7 @@ public final class SkinsCampeones extends JFrame implements ActionListener, Item
 
         panelSkin = new JPanel(new FlowLayout());
         skinLabel = new JLabel("Selecciona Skin:");
-        skinLabel.setFont(algerian2);
+        skinLabel.setFont(arial);
         skinSelector = new JComboBox<>();
         skinSelector.addItemListener(this);
 
@@ -108,9 +106,9 @@ public final class SkinsCampeones extends JFrame implements ActionListener, Item
 
         panelCoste = new JPanel();
         costeLabel = new JLabel("Coste Rp:");
-        costeLabel.setFont(algerian2);
+        costeLabel.setFont(arial);
         costeLabel2 = new JLabel("");
-        costeLabel2.setFont(algerian2);
+        costeLabel2.setFont(arial);
 
         costeLabel.setVisible(false);
         costeLabel2.setVisible(false);
@@ -129,8 +127,8 @@ public final class SkinsCampeones extends JFrame implements ActionListener, Item
     }
 
     void definirPanelImagen() {
-        panelImagen = new JPanel();
-        imagenLabel = new JLabel();
+        JPanel panelImagen = new JPanel();
+                imagenLabel = new JLabel();
 
         panelImagen.add(imagenLabel, BorderLayout.CENTER);
 

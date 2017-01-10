@@ -5,7 +5,7 @@
  */
 package BaseDatos;
 
-import Clases.CrashReporter;
+import GestionErrores.CrashReporterImpl;
 import Clases.Rutas;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,7 +38,7 @@ public class ArchivoPropiedades extends Properties{
             }
         } catch (IOException ex) {
             //ARCHIVOLOG.severe(CrashReporter.fechaActual().concat(" Error al leer el archivo properties "+ex.getMessage()));
-            CrashReporter.meterCadena(CrashReporter.fechaActual().concat(" Error al leer el archivo properties "+ex.getMessage()), claseActual);
+            CrashReporterImpl.meterCadena(CrashReporterImpl.fechaActual().concat(" Error al leer el archivo properties "+ex.getMessage()), claseActual);
             return null;
         }
     }

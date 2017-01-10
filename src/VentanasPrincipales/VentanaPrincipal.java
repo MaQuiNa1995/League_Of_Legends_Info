@@ -1,7 +1,7 @@
 package VentanasPrincipales;
 
 import BaseDatos.ArchivoPropiedades;
-import Clases.CrashReporter;
+import GestionErrores.CrashReporterImpl;
 import VentanasSecundarias.Ajustes;
 import VentanasSecundarias.HistoriasCampeones;
 import VentanasSecundarias.InfoCampeones;
@@ -10,9 +10,7 @@ import VentanasSecundarias.SkinsCampeones;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.Properties;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,33 +19,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public final class VentanaPrincipal extends JFrame implements ActionListener {
-    
-        static String claseActual="VentanasPrincipales.VentanasPrincipales";
-    
-    static final Logger ARCHIVOLOG = Logger.getLogger(claseActual);
 
-    JPanel menuPrincipal, menuExterior;
-
-    JButton arrayBotones[] = new JButton[5];
-
-    JButton consultarCampeones, consultarLores,
-            consultarSplashArt, consultarParcheActual, ajustes;
-
-    String[] arrayNombreBotones = {
-        "Ver Informacion De Campeones",
-        "Leer Historias De Los Campeones",
-        "Ver Splash Arts De Los Campeones",
-        "Consultar Parche Actual",
-        "Configuración"
-    };
-
-    String[] arrayToolTipText = {
-        "Te Muestra Informacion De Las Habilidades De Los Campeones y Estadisticas De Estos ",
-        "Muestra Una Breve Historia De Los Campeones",
-        "Te Muestra Las Diferentes Skins Que Tienen Los Campeones y Sus Costes",
-        "Muestra Informacion Sobre El Parche Actual",
-        "Aquí Podras Modificar El Estilo De La Aplicación Así Como Ajustes Varios"
-    };
+    static String claseActual = "VentanasPrincipales.VentanasPrincipales";
 
     public VentanaPrincipal() {
 
@@ -66,6 +39,27 @@ public final class VentanaPrincipal extends JFrame implements ActionListener {
     }
 
     public void definirMenuPrincipal() {
+
+        String[] arrayNombreBotones = {
+            "Ver Informacion De Campeones",
+            "Leer Historias De Los Campeones",
+            "Ver Splash Arts De Los Campeones",
+            "Consultar Parche Actual",
+            "Configuración"
+        };
+
+        String[] arrayToolTipText = {
+            "Te Muestra Informacion De Las Habilidades De Los Campeones y Estadisticas De Estos ",
+            "Muestra Una Breve Historia De Los Campeones",
+            "Te Muestra Las Diferentes Skins Que Tienen Los Campeones y Sus Costes",
+            "Muestra Informacion Sobre El Parche Actual",
+            "Aquí Podras Modificar El Estilo De La Aplicación Así Como Ajustes Varios"
+        };
+
+        JPanel menuPrincipal;
+
+        JButton arrayBotones[] = new JButton[5];
+
         menuPrincipal = new JPanel();
         menuPrincipal.setLayout(new GridLayout(5, 1, 2, 2));
 
@@ -100,10 +94,10 @@ public final class VentanaPrincipal extends JFrame implements ActionListener {
                     | InstantiationException
                     | IllegalAccessException
                     | UnsupportedLookAndFeelException ex) {
-                
-                CrashReporter.meterCadena(CrashReporter.fechaActual().concat(" Error al definir el tema "+ex.getMessage()), claseActual);
-                CrashReporter cr = new CrashReporter(claseActual);
-                
+
+                CrashReporterImpl.meterCadena(CrashReporterImpl.fechaActual().concat(" Error al definir el tema " + ex.getMessage()), claseActual);
+                CrashReporterImpl cr = new CrashReporterImpl(claseActual);
+
                 errorDefTema = true;
             }
         } while (errorDefTema == true);
@@ -134,7 +128,7 @@ public final class VentanaPrincipal extends JFrame implements ActionListener {
                     String temporada = propiedades.getProperty("temporada");
                     String version = propiedades.getProperty("version");
 
-                    browser.loadURL("http://euw.leagueoflegends.com/es/news/game-updates/patch/notas-de-la-version-" + temporada + version);
+                    browser.cargarURL("http://euw.leagueoflegends.com/es/news/game-updates/patch/notas-de-la-version-" + temporada + version);
                 });
                 break;
 
